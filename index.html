@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netscape - DYLAN RUBLE :: RESUME.EXE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ═══════════════════════════════════════
+       WINDOWS 95 DESKTOP
+    ═══════════════════════════════════════ */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+
+    body {
+      background-color: #000;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 4px 44px;
+    }
+
+    /* Subtle matrix trickle on the desktop itself */
+    #desktop-rain {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* Desktop icons — top-left strip */
+    .desktop-icons {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .d-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 62px;
+      cursor: default;
+      user-select: none;
+      gap: 2px;
+    }
+    .d-icon .ico  { font-size: 1.8rem; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .d-icon .ico .ani-gif { width: 32px; height: 32px; }
+    .d-icon .lbl  {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.55rem;
+      color: #fff;
+      text-shadow: 0 0 4px #000, 1px 1px 3px #000, -1px -1px 3px #000;
+      text-align: center;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+    .d-icon.selected .lbl {
+      background: #000080;
+      color: #fff;
+      padding: 0 2px;
+    }
+
+    /* ═══════════════════════════════════════
+       WIN95 3-D BORDER UTILITIES
+    ═══════════════════════════════════════ */
+    .raised {
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #808080 #808080 #ffffff;
+    }
+    .sunken {
+      border-style: solid;
+      border-width: 2px;
+      border-color: #808080 #dfdfdf #dfdfdf #808080;
+    }
+    .deep-sunken {
+      border-style: solid;
+      border-width: 1px;
+      border-color: #808080 #ffffff #ffffff #808080;
+      box-shadow: inset 1px 1px 0 #404040;
+    }
+
+    /* ═══════════════════════════════════════
+       NETSCAPE NAVIGATOR WINDOW
+    ═══════════════════════════════════════ */
+    .ns-window {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      margin-left: 64px;
+      display: flex;
+      flex-direction: column;
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #404040 #404040 #ffffff;
+      box-shadow: 2px 2px 0 #000;
+      min-height: 0;
+      min-width: 0;
+      width: calc(100% - 64px);
+    }
+
+    /* ── Title bar ── */
+    .ns-titlebar {
+      background: linear-gradient(to right, #000080 0%, #1084d0 100%);
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .ns-titlebar-left {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      overflow: hidden;
+    }
+    .ns-title-icon {
+      font-size: 0.85rem;
+      background: linear-gradient(135deg, #002288, #0055cc);
+      color: #fff;
+      font-weight: 900;
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Times New Roman', serif;
+      border: 1px solid #0033aa;
+      flex-shrink: 0;
+    }
+    .ns-title-text {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.72rem;
+      font-weight: bold;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ns-win-buttons {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .ns-win-btn {
+      width: 18px; height: 16px;
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      font-size: 0.6rem;
+      font-weight: bold;
+      cursor: default;
+      display: flex; align-items: center; justify-content: center;
+      color: #000;
+      font-family: 'Courier New', Courier, monospace;
+      padding-bottom: 1px;
+      user-select: none;
+    }
+    .ns-win-btn:hover { background: #d4d4d4; }
+    .ns-win-btn.close:hover { background: #ff6666; color: #fff; }
+
+    /* ── Menu bar ── */
+    .ns-menubar {
+      background: #c0c0c0;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 2px 4px;
+      border-bottom: 1px solid #808080;
+      flex-shrink: 0;
+    }
+    .ns-menu-item {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.65rem;
+      padding: 2px 7px;
+      cursor: default;
+      user-select: none;
+      color: #000;
+      white-space: nowrap;
+    }
+    .ns-menu-item:hover {
+      background: #000080;
+      color: #fff;
+    }
+    .ns-menu-item u { text-decoration: underline; }
+
+    /* ── Toolbar ── */
+    .ns-toolbar {
+      background: #c0c0c0;
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      border-bottom: 1px solid #808080;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    .ns-tool-btn {
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.58rem;
+      padding: 2px 7px;
+      cursor: default;
+      display: flex; align-items: center; gap: 3px;
+      white-space: nowrap;
+      user-select: none;
+      color: #000;
+    }
+    .ns-tool-btn:hover {
+      background: #d4d4d4;
+    }
+    .ns-tool-btn:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+    }
+    .ns-tool-btn.disabled { color: #808080; cursor: default; }
+    .ns-toolbar-sep {
+      width: 1px; height: 22px;
+      background: #808080;
+      margin: 0 3px;
+    }
+    .ns-logo {
+      margin-left: auto;
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, #002288, #0055cc);
+      color: #fff;
+      font-family: 'Times New Roman', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid #0033aa;
+      box-shadow: inset 0 0 4px rgba(0,0,255,0.3);
+      flex-shrink: 0;
+    }
+
+    /* ── Location bar ── */
+    .ns-locbar {
+      background: #c0c0c0;
+      padding: 2px 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-bottom: 2px solid #808080;
+      flex-shrink: 0;
+    }
+    .ns-loc-label {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.62rem;
+      color: #000;
+      white-space: nowrap;
+    }
+    .ns-loc-input {
+      flex: 1;
+      background: #fff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.62rem;
+      color: #000066;
+      padding: 1px 5px;
+      border-top: 1px solid #808080;
+      border-left: 1px solid #808080;
+      border-bottom: 1px solid #dfdfdf;
+      border-right: 1px solid #dfdfdf;
+      outline: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Scrollable browser content ── */
+    .ns-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: transparent;
+      min-height: 0;
+      min-width: 0;
+      position: relative;
+      isolation: isolate;
+    }
+    /* Scanlines — very subtle CRT overlay */
+    .ns-content::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 5;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0) 0px, rgba(0,0,0,0) 3px,
+        rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
+      );
+      opacity: 0.55;
+    }
+    /* Rain canvas — absolute, sized to full scroll height by JS */
+    #browser-rain {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* All resume content floats above rain */
+    .rain-page {
+      position: relative;
+      z-index: 10;
+      padding: 12px 4px 50px;
+      color: var(--text-body);
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      line-height: 1.75;
+      background: rgba(6, 10, 8, 0.38);
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    /* Game covers — positioned by JS to match browser pane; stamps stay fixed while scrolling */
+    .game-bg-container {
+      position: fixed;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .game-bg-stamp {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      opacity: 0.24;
+      text-align: center;
+      line-height: 1;
+    }
+    .game-bg-stamp .game-cover-img {
+      display: block;
+      width: clamp(52px, 6.5vw, 78px);
+      height: auto;
+      max-height: clamp(72px, 9vw, 108px);
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 3px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 14px rgba(61, 255, 112, 0.15);
+      filter: saturate(1.25) brightness(1.12) contrast(1.05);
+    }
+    .game-bg-stamp i {
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+    .game-stamp-tag {
+      font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      white-space: nowrap;
+    }
+    .stamp-neon { color: #3dff70; }
+    .stamp-amber { color: #ffb020; }
+    .stamp-cyan { color: #4de8ff; }
+    .stamp-gray { color: #9ab0a4; }
+    .page-inner > * {
+      position: relative;
+      z-index: 2;
+    }
+    .page-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .page-inner section,
+    .page-inner > div[id],
+    .page-inner > div:not(.marquee-wrap):not(.ns-bar-inner) {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .content-grid-wide {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+    .content-grid-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      width: 100%;
+      font-size: 0.78rem;
+    }
+    /* Secondary scanline layer on content (CSS-only, no JS) */
+    .rain-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 3px,
+        rgba(0, 0, 0, 0.04) 3px, rgba(0, 0, 0, 0.04) 4px
+      );
+    }
+    /* GeoCities-style section headers */
+    .sec-hdr {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 6px rgba(255, 229, 102, 0.35);
+      margin: 0 0 12px;
+      padding: 6px 0 6px 10px;
+      border-left: 3px solid var(--yellow);
+      border-bottom: 1px solid rgba(255, 229, 102, 0.22);
+    }
+    .sec-hdr .ani-hdr { filter: drop-shadow(0 0 4px rgba(255, 229, 102, 0.45)); }
+    /* Divider line */
+    .sect-div {
+      border: none;
+      border-top: 1px solid rgba(0,255,65,0.18);
+      margin: 18px 0;
+    }
+    /* GeoCities nav links — big, easy to click */
+    .geo-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--cyan);
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      padding: 5px 10px;
+      margin: 2px;
+      border: 1px solid rgba(0,245,255,0.3);
+      transition: all 0.15s;
+    }
+    .geo-nav:hover {
+      background: rgba(0,245,255,0.12);
+      color: var(--amber);
+      border-color: var(--amber);
+      text-shadow: 0 0 8px rgba(255,170,0,0.7);
+    }
+    /* Photo frame */
+    .about-block {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: start;
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+    .about-block > div:last-child {
+      min-width: 0;
+      width: 100%;
+    }
+    @media (max-width: 640px) {
+      .about-block {
+        grid-template-columns: 1fr;
+      }
+      .photo-frame {
+        float: none;
+        margin: 0 auto 14px;
+      }
+    }
+    .photo-frame {
+      text-align: center;
+    }
+    .photo-box {
+      width: 155px;
+      height: 200px;
+      border: 2px solid var(--amber);
+      background: rgba(255,170,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.62rem;
+      color: var(--amber);
+      text-align: center;
+      padding: 10px;
+      overflow: hidden;
+    }
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Skill tags — bigger */
+    .stag {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      margin: 2px 2px;
+      border: 1px solid;
+    }
+    /* Progress bars */
+    .pbar  { height: 6px; border: 1px solid rgba(0,255,65,0.25); background: rgba(0,255,65,0.05); margin-top: 3px; }
+    .pfill { height: 100%; background: linear-gradient(90deg, rgba(0,255,65,0.6), rgba(0,255,65,0.9)); }
+    .pfill.a { background: linear-gradient(90deg, rgba(255,170,0,0.6), rgba(255,170,0,0.9)); }
+    .pfill.c { background: linear-gradient(90deg, rgba(0,245,255,0.5), rgba(0,245,255,0.85)); }
+    /* Scrollbar styled to match Win95 */
+    .ns-content::-webkit-scrollbar { width: 16px; }
+    .ns-content::-webkit-scrollbar-track {
+      background: #c0c0c0;
+      border-left: 1px solid #808080;
+    }
+    .ns-content::-webkit-scrollbar-thumb {
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #808080 #808080 #ffffff;
+    }
+    .ns-content::-webkit-scrollbar-button {
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      height: 16px;
+    }
+
+    /* ── Status bar ── */
+    .ns-statusbar {
+      background: #c0c0c0;
+      border-top: 1px solid #808080;
+      padding: 2px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .ns-status-text {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.6rem;
+      color: #000;
+      border-top: 1px solid #808080;
+      border-left: 1px solid #808080;
+      border-bottom: 1px solid #fff;
+      border-right: 1px solid #fff;
+      padding: 0 6px;
+    }
+    .ns-status-security {
+      font-size: 0.7rem;
+      border-top: 1px solid #808080;
+      border-left: 1px solid #808080;
+      border-bottom: 1px solid #fff;
+      border-right: 1px solid #fff;
+      padding: 0 4px;
+    }
+
+    /* ═══════════════════════════════════════
+       WINDOWS 95 TASKBAR
+    ═══════════════════════════════════════ */
+    .win95-taskbar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 44px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 4px;
+      z-index: 1000;
+    }
+    .start-btn {
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: default;
+      user-select: none;
+      white-space: nowrap;
+      color: #000;
+    }
+    .start-btn:hover { background: #d4d4d4; }
+    .start-btn:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+    }
+    .start-flag {
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .taskbar-divider {
+      width: 2px;
+      height: 30px;
+      background: #808080;
+      border-right: 1px solid #fff;
+      margin: 0 2px;
+      flex-shrink: 0;
+    }
+    .taskbar-window-btn {
+      background: #c0c0c0;
+      border-style: solid;
+      border-width: 2px;
+      border-color: #808080 #ffffff #ffffff #808080; /* sunken = active */
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.63rem;
+      font-weight: bold;
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: default;
+      user-select: none;
+      min-width: 120px;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #000;
+    }
+    .taskbar-spacer { flex: 1; }
+    .system-tray {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 6px;
+      border-top: 1px solid #808080;
+      border-left: 1px solid #808080;
+      border-bottom: 1px solid #fff;
+      border-right: 1px solid #fff;
+    }
+    .tray-clock {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.68rem;
+      color: #000;
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════
+       RESUME CONTENT INSIDE BROWSER
+    ═══════════════════════════════════════ */
+    :root {
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', Courier, monospace;
+      --green:   #3dff70;
+      --gdim:    #2ecc5a;
+      --gfaint:  #1a5c2e;
+      --amber:   #ffb020;
+      --cyan:    #4de8ff;
+      --yellow:  #ffe566;
+      --red:     #ff5544;
+      --text-body: #d8f5e4;
+      --text-muted: #8fc9a8;
+      --screen:  #060a08;
+      --plastic: #272727;
+      --plastic2:#1c1c1c;
+      --plastic3:#323232;
+    }
+
+    .page-wrap {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 45%,
+          rgba(0,255,65,0.07) 0%, rgba(0,255,65,0.02) 40%, transparent 70%),
+        #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 10px 50px;
+    }
+
+    /* Monitor */
+    .monitor-unit { width: 100%; max-width: 880px; display: flex; flex-direction: column; align-items: center; }
+    .monitor-body {
+      width: 100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.07) 0px, transparent 3px),
+        linear-gradient(165deg, var(--plastic3) 0%, var(--plastic) 25%, var(--plastic2) 65%, #1a1a1a 100%);
+      border-radius: 16px 16px 6px 6px;
+      padding: 18px 20px 0;
+      box-shadow:
+        0 28px 80px rgba(0,0,0,0.95), 0 8px 20px rgba(0,0,0,0.8),
+        inset 2px 0 0 rgba(255,255,255,0.04), inset -2px 0 0 rgba(0,0,0,0.3),
+        inset 0 2px 0 rgba(255,255,255,0.06), inset 0 -4px 10px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .monitor-body::before {
+      content: '◉  ◉';
+      position: absolute; top: 8px; left: 12px; right: 12px;
+      display: flex; justify-content: space-between;
+      font-size: 0.5rem; color: #3d3d3d; pointer-events: none;
+    }
+    .screen-bezel {
+      background: linear-gradient(180deg, #0f0f0f 0%, #111 100%);
+      border-radius: 8px 8px 4px 4px;
+      padding: 8px 8px 10px;
+      box-shadow: inset 0 3px 12px rgba(0,0,0,0.9);
+    }
+    .crt-glass {
+      position: relative;
+      background: var(--screen);
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow:
+        0 0 16px rgba(0,255,65,0.45), 0 0 45px rgba(0,255,65,0.22), 0 0 100px rgba(0,255,65,0.1),
+        inset 70px 0 70px -70px rgba(0,0,0,0.75), inset -70px 0 70px -70px rgba(0,0,0,0.75),
+        inset 0 45px 45px -45px rgba(0,0,0,0.6), inset 0 -45px 45px -45px rgba(0,0,0,0.6);
+    }
+    #matrix-rain {
+      position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.45;
+    }
+    .scanlines {
+      position: absolute; inset: 0; z-index: 30; pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px);
+    }
+    .scan-beam {
+      position: absolute; left: 0; right: 0; height: 70px; z-index: 29; pointer-events: none;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0,255,65,0.025) 35%, rgba(0,255,65,0.04) 50%, rgba(0,255,65,0.025) 65%, transparent 100%);
+      animation: scan 10s linear infinite;
+    }
+    @keyframes scan { 0%{transform:translateY(-80px)} 100%{transform:translateY(110vh)} }
+    .crt-edges {
+      position: absolute; inset: 0; z-index: 28; pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.6) 100%);
+    }
+    .crt-glare {
+      position: absolute; top:0; left:0; width:55%; height:38%; z-index: 31; pointer-events: none;
+      background: linear-gradient(140deg, rgba(255,255,255,0.022) 0%, rgba(255,255,255,0.008) 30%, transparent 60%);
+      border-radius: 5px 0 0 0;
+    }
+
+    /* Terminal */
+    .terminal { position: relative; z-index: 10; }
+
+    /* Marquee */
+    .marquee-wrap { overflow:hidden; background:#000; border-bottom:2px solid var(--green); padding:3px 0; white-space:nowrap; }
+    .marquee-text {
+      display:inline-block; font-size:0.62rem; color:var(--green); letter-spacing:0.1em;
+      text-shadow:0 0 6px var(--green); animation:mq 35s linear infinite;
+    }
+    @keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* Netscape bar inside screen (kept for 90s feel) */
+    .ns-bar-inner {
+      background:#c0c0c0; padding:2px 5px; display:flex; align-items:center; gap:4px;
+      border-bottom:2px solid #808080; font-size:0.58rem; font-family:'Courier New',monospace;
+    }
+    .ns-bar-inner .lbl { color:#000; font-weight:bold; white-space:nowrap; }
+    .ns-bar-inner .url {
+      flex:1; overflow:hidden; white-space:nowrap; background:#fff; color:#000066;
+      padding:1px 4px;
+      border-top:1px solid #808080; border-left:1px solid #808080;
+      border-bottom:1px solid #dfdfdf; border-right:1px solid #dfdfdf;
+      font-size:0.58rem; font-family:'Courier New',monospace;
+    }
+    .ns-bar-inner .go-btn {
+      background:#c0c0c0; color:#000;
+      border-top:2px solid #fff; border-left:2px solid #fff;
+      border-bottom:2px solid #808080; border-right:2px solid #808080;
+      padding:1px 8px; font-size:0.58rem; font-weight:bold;
+      font-family:'Courier New',monospace; cursor:default; user-select:none;
+    }
+
+    /* Screen body */
+    .screen-body {
+      position:relative; z-index:10;
+      background-image:radial-gradient(circle, rgba(0,255,65,0.055) 1px, transparent 1px);
+      background-size:18px 18px; background-color:rgba(1,5,1,0.97);
+      padding:12px 14px 18px; color:var(--green); font-size:0.73rem; line-height:1.7;
+    }
+
+    /* Rainbow */
+    .rainbow { height:3px; border:none; margin:11px 0; background:linear-gradient(90deg,#f00 0%,#ff6600 12%,#ffff00 25%,#00ff00 38%,#00ffff 50%,#0066ff 63%,#9900ff 76%,#ff00ff 88%,#f00 100%); box-shadow:0 0 4px rgba(255,255,255,0.12); }
+
+    /* Section headers */
+    .sec90 {
+      background:rgba(0,28,5,0.92); border-left:4px solid var(--green);
+      border-top:1px solid rgba(0,255,65,0.4); border-bottom:1px solid rgba(0,255,65,0.4);
+      padding:4px 10px; margin-bottom:10px; font-size:0.72rem; font-weight:bold;
+      letter-spacing:0.16em; color:var(--yellow);
+      text-shadow:0 0 8px var(--yellow),0 0 16px rgba(255,255,0,0.3);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+
+    /* Box */
+    .box90 { border:1px solid rgba(0,255,65,0.28); padding:10px 12px; background:rgba(0,8,1,0.7); margin-bottom:8px; }
+
+    /* Blink */
+    .blink { animation:blink 0.85s step-end infinite; }
+    @keyframes blink { 50%{opacity:0} }
+    .flicker { animation:flicker 6s linear infinite; }
+    @keyframes flicker { 0%,100%{opacity:1} 90%{opacity:1} 91%{opacity:0.8} 92%{opacity:1} 94%{opacity:0.88} 95%{opacity:1} }
+    .cur::after { content:'█'; animation:blink 1s step-end infinite; color:var(--green); }
+
+    /* Resume header */
+    .resume-header { text-align: center; padding: 14px 0 10px; border-bottom: 2px solid rgba(61, 255, 112, 0.28); }
+    .header-badge {
+      font-size: 0.72rem;
+      color: var(--amber);
+      letter-spacing: 0.18em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .type-name {
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      line-height: 1.1;
+      margin: 0;
+      text-shadow: 0 0 12px rgba(61, 255, 112, 0.45);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .type-subtitle {
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--yellow);
+      margin: 10px 0 8px;
+      text-shadow: 0 0 8px rgba(255, 229, 102, 0.35);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 10px;
+    }
+    .subtitle-role {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+    /* Animated icon GIFs — every icon unique URL */
+    .ani-gif {
+      display: inline-block;
+      vertical-align: middle;
+      object-fit: contain;
+      flex-shrink: 0;
+      image-rendering: auto;
+    }
+    .ani-xs { width: 14px; height: 14px; }
+    .ani-pet { width: 52px; height: 52px; object-fit: contain; }
+    .ani-sm { width: 18px; height: 18px; margin-right: 4px; }
+    .ani-md { width: 22px; height: 22px; }
+    .ani-nav { width: 20px; height: 20px; }
+    .ani-hdr { width: 26px; height: 26px; }
+    .ani-lg { width: 30px; height: 30px; }
+    .ani-xl { width: 36px; height: 36px; }
+    .ani-badge { width: 22px; height: 22px; }
+    .ani-live { width: 16px; height: 16px; margin-right: 3px; }
+    .ani-play { width: 18px; height: 18px; }
+    .type-cursor { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .blink, .flicker, .cur::after, .marquee-text, .new-badge {
+        animation: none !important;
+      }
+      .ani-gif { display: none !important; }
+      #desktop-rain, #browser-rain { display: none !important; }
+      .game-bg-container { display: none !important; }
+    }
+
+    /* NEW badge — animated */
+    .new-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:3px;
+      color:var(--yellow);
+      font-size:0.53rem;
+      font-weight:bold;
+      border:1px solid var(--yellow);
+      padding:0 4px;
+      letter-spacing:0.1em;
+      vertical-align:middle;
+      margin-left:5px;
+    }
+
+    /* Counter */
+    .counter { display:inline-block; font-size:0.95rem; font-weight:bold; color:var(--green); text-shadow:0 0 10px var(--green); background:#000; border:2px solid rgba(0,255,65,0.5); padding:0 7px; letter-spacing:0.14em; }
+
+    /* Nav */
+    .nav90 { display:inline-block; font-size:0.63rem; font-weight:bold; letter-spacing:0.08em; color:var(--cyan); border:1px solid rgba(0,245,255,0.5); padding:3px 9px; text-decoration:none; background:rgba(0,245,255,0.05); transition:all 0.12s; }
+    .nav90:hover { background:var(--cyan); color:#000; box-shadow:0 0 10px var(--cyan); }
+
+    /* Project action buttons */
+    .proj-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 16px;
+    }
+    .proj-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      padding: 8px 18px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .proj-btn-primary.cyan {
+      color: #000;
+      background: var(--cyan);
+      box-shadow: 0 0 14px rgba(0,245,255,0.65), 0 0 28px rgba(0,245,255,0.25);
+    }
+    .proj-btn-primary.cyan:hover {
+      background: #000;
+      color: var(--cyan);
+      box-shadow: 0 0 22px rgba(0,245,255,1), 0 0 44px rgba(0,245,255,0.4);
+    }
+    .proj-btn-secondary.cyan {
+      color: var(--cyan);
+      background: rgba(0,245,255,0.04);
+      border: 1px solid rgba(0,245,255,0.55);
+      box-shadow: inset 0 0 12px rgba(0,245,255,0.08), 0 0 8px rgba(0,245,255,0.15);
+    }
+    .proj-btn-secondary.cyan:hover {
+      background: rgba(0,245,255,0.12);
+      color: #fff;
+      border-color: var(--cyan);
+      box-shadow: 0 0 16px rgba(0,245,255,0.45), inset 0 0 16px rgba(0,245,255,0.1);
+    }
+    .proj-btn-primary.green {
+      color: #000;
+      background: var(--green);
+      box-shadow: 0 0 14px rgba(0,255,65,0.65), 0 0 28px rgba(0,255,65,0.25);
+    }
+    .proj-btn-primary.green:hover {
+      background: #000;
+      color: var(--green);
+      box-shadow: 0 0 22px rgba(0,255,65,1), 0 0 44px rgba(0,255,65,0.4);
+    }
+
+    /* Pillar */
+    .pillar { border-left:3px solid; padding-left:10px; }
+    .pillar.g { border-color:rgba(0,255,65,0.6); }
+    .pillar.a { border-color:rgba(255,170,0,0.6); }
+    .pillar.c { border-color:rgba(0,245,255,0.6); }
+
+    /* Skill tag colors */
+    .stag.g { color:var(--green);  border-color:rgba(0,255,65,0.35); }
+    .stag.a { color:var(--amber);  border-color:rgba(255,170,0,0.35); }
+    .stag.c { color:var(--cyan);   border-color:rgba(0,245,255,0.35); }
+    .stag.p { color:#c9a0ff; border-color:rgba(180,140,255,0.4); }
+    .stag.g:hover { background:rgba(0,255,65,0.1);  box-shadow:0 0 5px rgba(0,255,65,0.4); }
+    .stag.a:hover { background:rgba(255,170,0,0.1); box-shadow:0 0 5px rgba(255,170,0,0.4); }
+    .stag.c:hover { background:rgba(0,245,255,0.1); box-shadow:0 0 5px rgba(0,245,255,0.4); }
+
+    /* Timeline */
+    .tl{display:flex;gap:12px;} .tl-col{display:flex;flex-direction:column;align-items:center;}
+    .tl-dot{width:9px;height:9px;border-radius:50%;border:2px solid var(--green);box-shadow:0 0 7px var(--green);flex-shrink:0;margin-top:4px;}
+    .tl-dot.a{border-color:var(--amber);box-shadow:0 0 7px var(--amber);}
+    .tl-line{width:1px;flex:1;background:rgba(0,255,65,0.12);margin:3px 0;}
+    .tl-line.a{background:rgba(255,170,0,0.12);}
+
+    /* Bars */
+    .pbar{height:4px;background:rgba(0,255,65,0.07);border:1px solid rgba(0,255,65,0.18);overflow:hidden;margin-top:3px;}
+    .pfill{height:100%;background:linear-gradient(90deg,var(--gfaint),var(--green));box-shadow:0 0 5px var(--green);}
+    .pfill.a{background:linear-gradient(90deg,rgba(255,170,0,0.15),var(--amber));box-shadow:0 0 5px var(--amber);}
+    .pfill.c{background:linear-gradient(90deg,rgba(0,245,255,0.08),var(--cyan));box-shadow:0 0 5px var(--cyan);}
+
+    /* Glow — subtle for readability */
+    .tg{text-shadow:0 0 5px rgba(61,255,112,0.35);}
+    .ta{text-shadow:0 0 5px rgba(255,176,32,0.35);}
+    .tc{text-shadow:0 0 5px rgba(77,232,255,0.35);}
+    .ty{text-shadow:0 0 5px rgba(255,229,102,0.35);}
+
+    /* Footer links */
+    .ftr-link { display:inline-block; font-size:0.58rem; color:var(--cyan); border:1px solid rgba(0,245,255,0.3); padding:2px 6px; text-decoration:none; margin:2px; background:rgba(0,245,255,0.03); letter-spacing:0.06em; transition:all 0.12s; }
+    .ftr-link:hover { background:rgba(0,245,255,0.1); box-shadow:0 0 6px rgba(0,245,255,0.3); }
+
+    /* Monitor stand */
+    .front-panel { background:linear-gradient(to bottom,#1e1e1e,#181818); border-radius:0 0 6px 6px; padding:7px 18px 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+    .brand-label { font-size:0.55rem; letter-spacing:0.2em; color:#3a3a3a; user-select:none; }
+    .monitor-controls { display:flex; align-items:center; gap:6px; }
+    .ctrl-btn { width:12px;height:8px;border-radius:2px;background:linear-gradient(to bottom,#303030,#222);border:1px solid #111; }
+    .ctrl-knob { width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a3a3a,#181818);border:1px solid #111; }
+    .pwr-led { width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green),0 0 12px var(--green);animation:led 3s ease-in-out infinite; }
+    @keyframes led { 0%,100%{opacity:1;box-shadow:0 0 6px var(--green),0 0 12px var(--green);}  50%{opacity:0.5;box-shadow:0 0 3px var(--green);} }
+    .speaker { display:flex;gap:3px;opacity:0.3; }
+    .speaker span { display:block;width:3px;height:3px;border-radius:50%;background:#555; }
+    .monitor-neck { width:100px;height:20px;background:linear-gradient(to bottom,#1e1e1e,#181818);clip-path:polygon(12% 0%,88% 0%,96% 100%,4% 100%); }
+    .monitor-base { width:260px;height:14px;background:linear-gradient(to bottom,#252525,#1a1a1a);border-radius:4px;box-shadow:0 5px 18px rgba(0,0,0,0.9);position:relative; }
+    .monitor-base::after { content:'';position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);width:180%;height:44px;background:radial-gradient(ellipse at 50% 0%,rgba(0,255,65,0.09) 0%,transparent 70%);pointer-events:none; }
+
+    /* Responsive */
+    @media(max-width:640px){
+      .ns-window { margin-left: 0; width: 100%; }
+      .desktop-icons { display: none; }
+      .ns-toolbar .ns-logo { display: none; }
+      .ns-tool-btn span { display: none; }
+      body { padding: 4px 4px 44px; }
+      .screen-body { padding:8px 8px 14px; font-size:0.67rem; }
+      .game-bg-stamp .game-cover-img {
+        width: 48px;
+        max-height: 66px;
+      }
+      .game-bg-stamp i { font-size: 1.8rem; }
+      .game-bg-container { display: none !important; }
+    }
+
+    /* ═══════════════════════════════════════
+       PRINT / PDF — clean recruiter layout
+    ═══════════════════════════════════════ */
+    @media print {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
+      }
+
+      html, body {
+        height: auto !important;
+        overflow: visible !important;
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 11pt !important;
+        line-height: 1.45 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Hide all retro chrome, effects, and decoration */
+      #desktop-rain,
+      #browser-rain,
+      .game-bg-container,
+      .desktop-icons,
+      .win95-taskbar,
+      .ns-titlebar,
+      .ns-menubar,
+      .ns-toolbar,
+      .ns-locbar,
+      .ns-statusbar,
+      .marquee-wrap,
+      .ns-bar-inner,
+      .retro-decor,
+      .ani-gif,
+      .type-cursor,
+      .new-badge,
+      .cur::after {
+        display: none !important;
+      }
+
+      .ns-window {
+        position: static !important;
+        margin: 0 !important;
+        border: none !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+      }
+
+      .ns-content {
+        overflow: visible !important;
+        background: #fff !important;
+        position: static !important;
+        min-height: auto !important;
+      }
+
+      .ns-content::after,
+      .rain-page::before {
+        display: none !important;
+      }
+
+      .rain-page {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0.4in 0.55in 0.5in !important;
+        font-size: 11pt !important;
+        line-height: 1.45 !important;
+      }
+
+      /* Header */
+      .resume-header {
+        border-bottom: 2px solid #000 !important;
+        padding-bottom: 12pt !important;
+        margin-bottom: 14pt !important;
+        text-align: left !important;
+      }
+      .type-name {
+        font-size: 22pt !important;
+        color: #000 !important;
+        letter-spacing: 0.04em !important;
+        margin-bottom: 4pt !important;
+      }
+      .type-subtitle {
+        font-size: 11pt !important;
+        color: #333 !important;
+        letter-spacing: 0.06em !important;
+        margin: 4pt 0 8pt !important;
+      }
+      .header-meta {
+        font-size: 10pt !important;
+        gap: 12pt !important;
+        margin-bottom: 0 !important;
+      }
+      .header-meta span,
+      .header-meta a {
+        color: #000 !important;
+      }
+
+      /* Navigation becomes a simple link row */
+      .geo-nav {
+        display: inline !important;
+        color: #000 !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 8pt 0 0 !important;
+        font-size: 10pt !important;
+        font-weight: normal !important;
+        text-decoration: underline !important;
+      }
+      .geo-nav::after { content: ' ·'; }
+      .geo-nav:last-child::after { content: ''; }
+
+      /* Section headers */
+      .sec-hdr {
+        color: #000 !important;
+        font-size: 12pt !important;
+        letter-spacing: 0.05em !important;
+        border-left: 3px solid #000 !important;
+        border-bottom: 1px solid #ccc !important;
+        margin-top: 14pt !important;
+        padding: 4pt 0 4pt 8pt !important;
+        page-break-after: avoid;
+      }
+
+      .sect-div {
+        border-top: 1px solid #ccc !important;
+        margin: 12pt 0 !important;
+      }
+
+      /* Body text — force readable black */
+      .rain-page p,
+      .rain-page li,
+      .rain-page ul,
+      .rain-page div {
+        color: #000 !important;
+      }
+      .rain-page strong,
+      .tg, .ta, .tc, .ty {
+        color: #000 !important;
+        font-weight: bold !important;
+      }
+
+      /* Photo */
+      .photo-frame {
+        float: left !important;
+        margin: 0 16pt 10pt 0 !important;
+      }
+      .photo-box {
+        width: 1.4in !important;
+        height: 1.75in !important;
+        border: 1px solid #999 !important;
+        background: #fff !important;
+      }
+      .photo-frame .lbl-print-hide { color: #666 !important; font-size: 9pt !important; }
+
+      /* Skill tags */
+      .stag {
+        color: #000 !important;
+        border: 1px solid #666 !important;
+        background: #f5f5f5 !important;
+        font-size: 9pt !important;
+        padding: 1pt 5pt !important;
+        margin: 2pt !important;
+      }
+
+      /* Progress bars */
+      .pbar {
+        border: 1px solid #999 !important;
+        background: #eee !important;
+        height: 5pt !important;
+      }
+      .pfill, .pfill.a, .pfill.c {
+        background: #333 !important;
+        box-shadow: none !important;
+      }
+
+      /* Project launch buttons */
+      a[style*="background:var(--amber)"],
+      a[style*="background:var(--cyan)"],
+      .proj-btn {
+        display: inline-block !important;
+        color: #000 !important;
+        background: #eee !important;
+        border: 1px solid #000 !important;
+        padding: 4pt 10pt !important;
+        font-size: 10pt !important;
+        text-decoration: none !important;
+        margin-top: 6pt !important;
+      }
+      .proj-actions {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8pt !important;
+      }
+
+      /* Footer */
+      .ftr-link {
+        color: #000 !important;
+        border: none !important;
+        background: none !important;
+        font-size: 10pt !important;
+        text-decoration: underline !important;
+        padding: 0 !important;
+        margin: 0 8pt 0 0 !important;
+      }
+
+      /* Avoid awkward breaks */
+      #about, #skills, #projects, #history, #hire {
+        page-break-inside: avoid;
+      }
+      h1, h2, .sec-hdr { page-break-after: avoid; }
+
+      /* Show URLs for email links */
+      a[href^="mailto:"]::after {
+        content: ' (' attr(href) ')';
+        font-size: 9pt;
+        color: #444;
+      }
+      a[href^="http"]::after {
+        content: ' (' attr(href) ')';
+        font-size: 8pt;
+        color: #444;
+        word-break: break-all;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Desktop ambient matrix rain -->
+  <canvas id="desktop-rain"></canvas>
+
+  <!-- Desktop icons (top-left, visible beside browser window) -->
+  <div class="desktop-icons">
+    <div class="d-icon selected">
+      <span class="ico"><img class="ani-gif" src="gifs/old-internet.jpg" alt="" /></span>
+      <span class="lbl">My Computer</span>
+    </div>
+    <div class="d-icon">
+      <span class="ico"><img class="ani-gif" src="gifs/dialing-up.webp" alt="" /></span>
+      <span class="lbl">My Documents</span>
+    </div>
+    <div class="d-icon">
+      <span class="ico"><img class="ani-gif" src="gifs/turtle-jedi.webp" alt="" /></span>
+      <span class="lbl">Recycle Bin</span>
+    </div>
+    <div class="d-icon">
+      <span class="ico"><img class="ani-gif" src="gifs/melee.webp" alt="" /></span>
+      <span class="lbl">Network Neighbor&shy;hood</span>
+    </div>
+    <div class="d-icon">
+      <span class="ico"><img class="ani-gif" src="gifs/magic.webp" alt="" /></span>
+      <span class="lbl">resume.htm</span>
+    </div>
+    <div class="d-icon">
+      <span class="ico"><img class="ani-gif" src="gifs/yogi.webp" alt="" /></span>
+      <span class="lbl">Yogi.exe</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       NETSCAPE NAVIGATOR WINDOW
+  ═══════════════════════════════════════ -->
+  <div class="ns-window">
+
+    <!-- Title bar -->
+    <div class="ns-titlebar">
+      <div class="ns-titlebar-left">
+        <div class="ns-title-icon">N</div>
+        <span class="ns-title-text">Netscape Navigator — DYLAN RUBLE :: RESUME.EXE</span>
+      </div>
+      <div class="ns-win-buttons">
+        <button class="ns-win-btn">_</button>
+        <button class="ns-win-btn">□</button>
+        <button class="ns-win-btn close">✕</button>
+      </div>
+    </div>
+
+    <!-- Menu bar -->
+    <div class="ns-menubar">
+      <span class="ns-menu-item"><u>F</u>ile</span>
+      <span class="ns-menu-item"><u>E</u>dit</span>
+      <span class="ns-menu-item"><u>V</u>iew</span>
+      <span class="ns-menu-item"><u>G</u>o</span>
+      <span class="ns-menu-item"><u>B</u>ookmarks</span>
+      <span class="ns-menu-item"><u>O</u>ptions</span>
+      <span class="ns-menu-item">Directory</span>
+      <span class="ns-menu-item">Window</span>
+      <span class="ns-menu-item"><u>H</u>elp</span>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="ns-toolbar">
+      <button class="ns-tool-btn disabled">◀ <span>Back</span></button>
+      <button class="ns-tool-btn disabled">▶ <span>Forward</span></button>
+      <button class="ns-tool-btn">⏹ <span>Stop</span></button>
+      <button class="ns-tool-btn">↺ <span>Reload</span></button>
+      <button class="ns-tool-btn">🏠 <span>Home</span></button>
+      <div class="ns-toolbar-sep"></div>
+      <button class="ns-tool-btn">🔍 <span>Search</span></button>
+      <button class="ns-tool-btn">📁 <span>Guide</span></button>
+      <button class="ns-tool-btn">🖨️ <span>Print</span></button>
+      <button class="ns-tool-btn">🔒 <span>Security</span></button>
+      <div class="ns-logo">N</div>
+    </div>
+
+    <!-- Location bar -->
+    <div class="ns-locbar">
+      <span class="ns-loc-label">Location:</span>
+      <input class="ns-loc-input" readonly
+        value="http://www.geocities.com/SiliconValley/Matrix/1337/dylan_ruble_resume.htm" />
+    </div>
+
+    <!-- ═══ SCROLLABLE PAGE CONTENT ═══ -->
+    <div class="ns-content">
+      <!-- Game cover watermarks — only inside browser pane -->
+      <div class="game-bg-container" aria-hidden="true">
+        <!-- top band -->
+        <div class="game-bg-stamp" style="top:3%;left:2%;transform:rotate(-9deg);">
+          <img class="game-cover-img" src="games/morrowind.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:4%;right:2%;transform:rotate(11deg);">
+          <img class="game-cover-img" src="games/oblivion.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:2%;left:38%;transform:rotate(6deg);">
+          <img class="game-cover-img" src="games/halo.png" alt="" />
+        </div>
+        <!-- upper-mid band -->
+        <div class="game-bg-stamp" style="top:14%;left:16%;transform:rotate(-7deg);">
+          <img class="game-cover-img" src="games/skyrim.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:15%;right:20%;transform:rotate(13deg);">
+          <img class="game-cover-img" src="games/halo2.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:16%;left:3%;transform:rotate(-12deg);">
+          <img class="game-cover-img" src="games/halo3.png" alt="" />
+        </div>
+        <!-- mid band -->
+        <div class="game-bg-stamp" style="top:28%;right:3%;transform:rotate(-10deg);">
+          <img class="game-cover-img" src="games/fable.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:30%;left:22%;transform:rotate(10deg);">
+          <img class="game-cover-img" src="games/fable2.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:27%;right:26%;transform:rotate(-6deg);">
+          <img class="game-cover-img" src="games/demonsouls.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:29%;left:42%;transform:rotate(14deg);">
+          <img class="game-cover-img" src="games/farcry3.png" alt="" />
+        </div>
+        <!-- center band -->
+        <div class="game-bg-stamp" style="top:42%;left:2%;transform:rotate(7deg);">
+          <img class="game-cover-img" src="games/darksouls1.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:44%;right:5%;transform:rotate(-11deg);">
+          <img class="game-cover-img" src="games/darksouls2.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:43%;left:36%;transform:rotate(-5deg);">
+          <img class="game-cover-img" src="games/darksouls3.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:41%;right:22%;transform:rotate(9deg);">
+          <img class="game-cover-img" src="games/farcry4.png" alt="" />
+        </div>
+        <!-- lower-mid band -->
+        <div class="game-bg-stamp" style="top:56%;right:3%;transform:rotate(-8deg);">
+          <img class="game-cover-img" src="games/eldenring.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:58%;left:14%;transform:rotate(12deg);">
+          <img class="game-cover-img" src="games/gtasa.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:55%;right:24%;transform:rotate(-13deg);">
+          <img class="game-cover-img" src="games/blitz2.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:57%;left:40%;transform:rotate(6deg);">
+          <img class="game-cover-img" src="games/farcryprimal.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:63%;left:46%;transform:rotate(-4deg);">
+          <img class="game-cover-img" src="games/kingdomhearts.png" alt="" />
+        </div>
+        <!-- bottom band -->
+        <div class="game-bg-stamp" style="top:70%;left:3%;transform:rotate(-10deg);">
+          <img class="game-cover-img" src="games/nbastreet2.png" alt="" />
+        </div>
+        <div class="game-bg-stamp" style="top:72%;right:16%;transform:rotate(7deg);">
+          <img class="game-cover-img" src="games/assassinscreed.png" alt="" />
+        </div>
+      </div>
+
+      <!-- Rain canvas — covers full scroll height, sized by JS -->
+      <canvas id="browser-rain"></canvas>
+
+      <!-- All content floats above rain -->
+      <div class="rain-page">
+        <div class="page-inner">
+
+        <!-- MARQUEE -->
+        <div class="marquee-wrap">
+          <span class="marquee-text">
+            <img class="ani-gif ani-xs" src="gifs/old-internet.jpg" alt="" />
+            WELCOME TO DYLAN RUBLE'S HOMEPAGE
+            <img class="ani-gif ani-xs" src="gifs/dancing-baby.jpg" alt="" />
+            UNDER CONSTRUCTION
+            <img class="ani-gif ani-xs" src="gifs/darksouls.jpg" alt="" />
+            VETERAN · BUILDER · CODER
+            <img class="ani-gif ani-xs" src="gifs/matrix-rain.webp" alt="" />
+            LAST UPDATED: 06/22/1999
+            <img class="ani-gif ani-xs" src="gifs/halo.jpg" alt="" />
+            BEST VIEWED IN NETSCAPE 4.0
+            <img class="ani-gif ani-xs" src="gifs/yogi.webp" alt="" />
+            YOU HAVE BEEN LOGGED
+            <img class="ani-gif ani-xs" src="gifs/yogi-bear.webp" alt="" />
+            FOLLOW THE WHITE RABBIT
+            <img class="ani-gif ani-xs" src="gifs/dialing-up.webp" alt="" />
+            VISITOR COUNT: 001337 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <img class="ani-gif ani-xs" src="gifs/turtle-jedi.webp" alt="" />
+            WELCOME TO DYLAN RUBLE'S HOMEPAGE
+            <img class="ani-gif ani-xs" src="gifs/melee.webp" alt="" />
+            UNDER CONSTRUCTION
+            <img class="ani-gif ani-xs" src="gifs/magic.webp" alt="" />
+            VETERAN · BUILDER · CODER
+            <img class="ani-gif ani-xs" src="gifs/old-internet.jpg" alt="" />
+            LAST UPDATED: 06/22/1999
+            <img class="ani-gif ani-xs" src="gifs/dancing-baby.jpg" alt="" />
+            BEST VIEWED IN NETSCAPE 4.0
+            <img class="ani-gif ani-xs" src="gifs/darksouls.jpg" alt="" />
+            YOU HAVE BEEN LOGGED
+            <img class="ani-gif ani-xs" src="gifs/yogi.webp" alt="" />
+            FOLLOW THE WHITE RABBIT
+            <img class="ani-gif ani-xs" src="gifs/matrix-rain.webp" alt="" />
+            VISITOR COUNT: 001337 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </span>
+        </div>
+
+        <!-- Inner fake GeoCities URL -->
+        <div class="ns-bar-inner">
+          <span class="lbl">Location:</span>
+          <span class="url">http://www.geocities.com/SiliconValley/Matrix/1337/dylan_ruble.htm</span>
+          <span class="go-btn">Go</span>
+        </div>
+
+        <!-- ══ PAGE HEADER ══ -->
+        <header class="resume-header">
+          <p class="header-badge retro-decor">
+            <img class="ani-gif ani-badge" src="gifs/matrix-rain.webp" alt="" />
+            UNDER CONSTRUCTION
+            <img class="ani-gif ani-badge" src="gifs/yogi-bear.webp" alt="" />
+          </p>
+          <h1 class="type-name">
+            <img class="ani-gif ani-lg" src="gifs/dialing-up.webp" alt="" />
+            DYLAN RUBLE
+            <img class="ani-gif ani-lg" src="gifs/turtle-jedi.webp" alt="" />
+          </h1>
+          <p class="type-subtitle">
+            <span class="subtitle-role"><img class="ani-gif ani-lg" src="gifs/halo.jpg" alt="" /> VETERAN</span>
+            <span class="subtitle-role"><img class="ani-gif ani-lg" src="gifs/melee.webp" alt="" /> BUILDER</span>
+            <span class="subtitle-role"><img class="ani-gif ani-lg" src="gifs/magic.webp" alt="" /> DIGITAL CRAFTSMAN</span>
+            <img class="ani-gif ani-md" src="gifs/matrix-rain.webp" alt="" />
+          </p>
+          <div class="header-meta" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;font-size:0.88rem;margin-bottom:8px;">
+            <span style="color:var(--cyan);display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/binary-cat.jpg" alt="" /> Bartlesville, Oklahoma
+            </span>
+            <a href="mailto:ruble.dylan@yahoo.com" style="color:var(--cyan);text-decoration:underline;display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/thieving.webp" alt="" /> ruble.dylan@yahoo.com
+            </a>
+            <span style="color:var(--amber);display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/osrs.webp" alt="" /> Open to Opportunities
+            </span>
+          </div>
+          <p class="retro-decor" style="font-size:0.75rem;color:var(--text-muted);margin:0;">
+            You are visitor #<strong style="color:var(--green);">001,337</strong>
+            &nbsp;·&nbsp;
+            <span style="color:#e07070;">Your IP has been logged: 192.168.1.337</span>
+          </p>
+        </header>
+
+        <!-- ══ NAVIGATION ══ -->
+        <div style="text-align:center;padding:12px 0 8px;border-bottom:1px solid rgba(0,255,65,0.15);">
+          <a href="#about"    class="geo-nav"><img class="ani-gif ani-nav" src="gifs/turtle-jedi.webp" alt="" /> About Me</a>
+          <a href="#skills"   class="geo-nav"><img class="ani-gif ani-nav" src="gifs/melee.webp" alt="" /> My Skills</a>
+          <a href="#projects" class="geo-nav"><img class="ani-gif ani-nav" src="gifs/magic.webp" alt="" /> My Projects</a>
+          <a href="#history"  class="geo-nav"><img class="ani-gif ani-nav" src="gifs/construction.webp" alt="" /> Work History</a>
+          <a href="#hire"     class="geo-nav"><img class="ani-gif ani-nav" src="gifs/strength.webp" alt="" /> Why Hire Me</a>
+          <a href="mailto:ruble.dylan@yahoo.com" class="geo-nav"><img class="ani-gif ani-nav" src="gifs/thieving.webp" alt="" /> Email Me</a>
+        </div>
+        <div style="text-align:center;font-size:0.65rem;color:var(--text-muted);padding:5px 0 10px;letter-spacing:0.1em;" class="retro-decor">
+          [ sign my guestbook ] · [ join the web ring ] · [ spread the signal ]
+        </div>
+
+        <!-- ══ PHOTO + WELCOME ══ -->
+        <div class="sec-hdr"><img class="ani-gif ani-hdr" src="gifs/matrix-rain.webp" alt="" /> About Me — Who I Am</div>
+        <div id="about" class="about-block">
+          <!-- Photo floated left — drop photo.jpg in folder to show it -->
+          <div class="photo-frame">
+            <div class="photo-box" id="photo-box">
+              <img src="photo.png" alt="Dylan Ruble"
+                   style="width:100%;height:100%;object-fit:cover;display:block;"
+                     onerror="
+                     this.style.display='none';
+                     document.getElementById('photo-box').style.flexDirection='column';
+                     document.getElementById('photo-box').innerHTML='<div style=\'font-size:2.5rem;margin-bottom:8px;\'>📷</div><div style=\'font-weight:bold;font-size:0.75rem;margin-bottom:4px;\'>YOUR PHOTO<br>GOES HERE</div><div style=\'font-size:0.6rem;opacity:0.65;\'>Save your photo as<br><strong>photo.png</strong><br>in the same folder</div>'">
+            </div>
+            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:5px;">Dylan Ruble</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);">Bartlesville, OK</div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;align-items:center;">
+              <img class="ani-gif ani-pet" src="gifs/yogi.webp" alt="" />
+              <img class="ani-gif ani-pet" src="gifs/yogi-bear.webp" alt="" />
+            </div>
+            <div style="font-size:0.58rem;color:var(--amber);text-align:center;margin-top:4px;font-weight:bold;">★ YOGI ★</div>
+          </div>
+
+          <!-- Welcome text -->
+          <div>
+            <p style="margin-bottom:12px;">
+              Welcome to my homepage! I'm <strong style="color:var(--amber);">Dylan Ruble</strong> — a U.S. Military Veteran, 10-year Construction Professional, and self-taught AI-accelerated digital builder based out of Bartlesville, Oklahoma.
+            </p>
+            <p style="margin-bottom:12px;">
+              I'm not your typical developer. Before I ever wrote a line of code, I spent years leading job sites, coordinating crews, and getting missions done in the field. <strong style="color:var(--green);">That discipline now drives everything I build online.</strong>
+            </p>
+            <p style="margin-bottom:12px;">
+              Right now I'm building fast using <strong style="color:var(--amber);">Cursor</strong> — the AI-powered IDE — along with HTML, CSS, JavaScript, Python, Node.js, and Discord bots. I also <strong style="color:var(--cyan);">build custom websites</strong>, design <strong style="color:var(--cyan);">workflow organizers</strong>, and create <strong style="color:var(--cyan);">email organizer tools</strong> that help people stay on top of their inbox and daily tasks. I ship real tools, not vaporware.
+            </p>
+            <p style="margin-bottom:12px;">
+              Off the job site and off the keyboard, I'm a lifelong gamer — RPGs, souls-likes, open-world adventures, and OG Xbox classics are my happy place. That same love of systems, exploration, and grinding carries into how I build software.
+            </p>
+            <p style="font-size:0.78rem;color:var(--text-muted);">
+              Most people will recognize Dylan from his work in the construction field and the U.S. Armed Forces.
+              You'll find information about his skills, projects, and work history by following the links above.
+              Feel free to <a href="mailto:ruble.dylan@yahoo.com" style="color:var(--cyan);">email me</a> with any opportunities.
+              <em style="color:rgba(0,255,65,0.4);">(Note: The guestbook is currently not working.)</em>
+            </p>
+          </div>
+        </div>
+
+        <hr class="sect-div">
+
+        <!-- ══ SKILLS ══ -->
+        <div id="skills" style="margin-bottom:22px;">
+          <div class="sec-hdr"><img class="ani-gif ani-hdr" src="gifs/halo.jpg" alt="" /> My Skills &amp; Capabilities</div>
+          <div class="content-grid-wide" style="margin-bottom:16px;">
+            <div>
+              <div style="font-size:0.82rem;color:var(--green);font-weight:bold;margin-bottom:8px;letter-spacing:0.1em;display:flex;align-items:center;gap:6px;">
+                <img class="ani-gif ani-sm" src="gifs/binary-cat.jpg" alt="" /> Military
+              </div>
+              <div>
+                <span class="stag g">Discipline</span><span class="stag g">Leadership</span><span class="stag g">Mission Execution</span>
+                <span class="stag g">Team Coordination</span><span class="stag g">Adaptability</span><span class="stag g">Accountability</span>
+                <span class="stag g">Composure Under Pressure</span><span class="stag g">Integrity</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:0.82rem;color:var(--amber);font-weight:bold;margin-bottom:8px;letter-spacing:0.1em;display:flex;align-items:center;gap:6px;">
+                <img class="ani-gif ani-sm" src="gifs/construction.webp" alt="" /> Construction
+              </div>
+              <div>
+                <span class="stag a">Project Management</span><span class="stag a">Site Supervision</span><span class="stag a">Crew Leadership</span>
+                <span class="stag a">Scheduling</span><span class="stag a">Blueprint Reading</span><span class="stag a">Safety Compliance</span>
+                <span class="stag a">Quality Control</span><span class="stag a">Client Communication</span><span class="stag a">Problem Solving</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:0.82rem;color:var(--cyan);font-weight:bold;margin-bottom:8px;letter-spacing:0.1em;display:flex;align-items:center;gap:6px;">
+                <img class="ani-gif ani-sm" src="gifs/dialing-up.webp" alt="" /> Digital Builder
+              </div>
+              <div>
+                <span class="stag c">Custom Websites</span><span class="stag c">Web Design</span><span class="stag c">HTML &amp; CSS</span>
+                <span class="stag c">Tailwind CSS</span><span class="stag c">JavaScript</span><span class="stag c">Cursor</span>
+                <span class="stag c">AI-Assisted Dev</span><span class="stag c">Workflow Design</span><span class="stag c">Process Organization</span>
+                <span class="stag c">Email Organizers</span><span class="stag c">Inbox Automation</span>
+                <span class="stag c">Node.js</span><span class="stag c">Discord Dev</span><span class="stag c">Python</span>
+                <span class="stag c">Streamlit</span><span class="stag c">Git / GitHub</span><span class="stag c">Private Scripts</span>
+              </div>
+            </div>
+          </div>
+          <div class="content-grid-stats" id="value-grid">
+            <div>
+              <div style="display:flex;justify-content:space-between;color:rgba(0,255,65,0.75);margin-bottom:3px;"><span>Grit &amp; Execution</span><strong class="tg">100%</strong></div>
+              <div class="pbar"><div class="pfill" style="width:100%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;color:rgba(0,255,65,0.75);margin-bottom:3px;"><span>Project Management</span><strong class="tg">95%</strong></div>
+              <div class="pbar"><div class="pfill" style="width:95%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;color:rgba(255,170,0,0.8);margin-bottom:3px;"><span>AI-Assisted Building</span><strong class="ta">▲ Leveling Up</strong></div>
+              <div class="pbar" style="background:rgba(255,170,0,0.06);border-color:rgba(255,170,0,0.2);"><div class="pfill a" style="width:72%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;color:rgba(0,245,255,0.8);margin-bottom:3px;"><span>Adaptability</span><strong class="tc">92%</strong></div>
+              <div class="pbar" style="background:rgba(0,245,255,0.05);border-color:rgba(0,245,255,0.2);"><div class="pfill c" style="width:92%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="sect-div">
+
+        <!-- ══ PROJECTS ══ -->
+        <div id="projects" style="margin-bottom:22px;">
+          <div class="sec-hdr"><img class="ani-gif ani-hdr" src="gifs/turtle-jedi.webp" alt="" /> My Projects — What I've Built</div>
+          <p style="color:rgba(0,255,65,0.55);font-size:0.78rem;margin-bottom:16px;font-style:italic;display:flex;align-items:center;gap:6px;">
+            <img class="ani-gif ani-sm" src="gifs/melee.webp" alt="" /> Real shipped tools. No vaporware.
+          </p>
+
+          <!-- RoughIn Estimate Pro — PRIMARY -->
+          <div style="margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(255,170,0,0.15);">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:1.1rem;font-weight:900;color:var(--amber);text-shadow:0 0 16px rgba(255,170,0,0.7);display:inline-flex;align-items:center;gap:6px;" class="ta">
+                <img class="ani-gif ani-md" src="gifs/magic.webp" alt="" /> RoughIn Estimate Pro
+              </span>
+              <span class="new-badge"><img class="ani-gif ani-xs" src="gifs/old-internet.jpg" alt="" /> NEW</span>
+              <span style="color:var(--green);font-size:0.78rem;display:inline-flex;align-items:center;gap:4px;" class="tg">
+                <img class="ani-gif ani-live" src="gifs/dancing-baby.jpg" alt="" /> LIVE
+              </span>
+              <span style="color:var(--amber);font-size:0.72rem;" class="ta">Primary Project</span>
+            </div>
+            <p style="margin-bottom:12px;font-size:0.88rem;">
+              A <strong style="color:var(--amber);">high-speed construction estimation web tool</strong> built with Tailwind CSS and JavaScript.
+              Generates <strong style="color:var(--amber);">professional blueprint-style PDFs instantly</strong> for field workers.
+              Built by a real field worker, for real field workers. No spreadsheet. No delay.
+            </p>
+            <div style="margin-bottom:12px;">
+              <span class="stag a">Tailwind CSS</span><span class="stag c">JavaScript</span><span class="stag c">PDF Generation</span>
+              <span class="stag a">Construction Tech</span><span class="stag g">Netlify</span><span class="stag g">AI-Assisted</span>
+            </div>
+            <a href="https://roughinn.netlify.app/" target="_blank" rel="noopener noreferrer"
+               style="display:inline-flex;align-items:center;gap:8px;font-family:'Courier New',Courier,monospace;font-size:0.88rem;font-weight:bold;letter-spacing:0.08em;color:#000;background:var(--amber);padding:8px 20px;text-decoration:none;box-shadow:0 0 16px rgba(255,170,0,0.7),0 0 32px rgba(255,170,0,0.3);transition:all 0.2s;"
+               onmouseover="this.style.background='#000';this.style.color='#ffaa00';this.style.boxShadow='0 0 24px rgba(255,170,0,1),0 0 48px rgba(255,170,0,0.4)'"
+               onmouseout="this.style.background='#ffaa00';this.style.color='#000';this.style.boxShadow='0 0 16px rgba(255,170,0,0.7),0 0 32px rgba(255,170,0,0.3)'">
+              <img class="ani-gif ani-play" src="gifs/darksouls.jpg" alt="" /> Launch RoughIn Estimate Pro
+            </a>
+          </div>
+
+          <!-- ScrapeGoat -->
+          <div style="margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(0,245,255,0.12);">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:1.1rem;font-weight:900;color:var(--cyan);text-shadow:0 0 14px rgba(0,245,255,0.6);display:inline-flex;align-items:center;gap:6px;" class="tc">
+                <img class="ani-gif ani-md" src="gifs/binary-cat.jpg" alt="" /> ScrapeGoat
+              </span>
+              <span class="new-badge"><img class="ani-gif ani-xs" src="gifs/halo.jpg" alt="" /> NEW</span>
+              <span style="color:var(--green);font-size:0.78rem;display:inline-flex;align-items:center;gap:4px;" class="tg">
+                <img class="ani-gif ani-live" src="gifs/binary-cat.jpg" alt="" /> LIVE
+              </span>
+            </div>
+            <p style="margin-bottom:12px;font-size:0.88rem;">
+              An <strong style="color:var(--cyan);">AI-powered web scraping tool</strong> built with Python and Streamlit.
+              Point it at any URL — it extracts, structures, and delivers <strong style="color:var(--amber);">clean data instantly</strong>.
+              No code required. Built for anyone who needs data without the headache.
+            </p>
+            <div style="margin-bottom:12px;">
+              <span class="stag c">Python</span><span class="stag c">Streamlit</span>
+              <span class="stag g">Web Scraping</span><span class="stag a">AI-Assisted</span>
+            </div>
+            <div class="proj-actions">
+              <a href="https://scrapegoat-project.netlify.app/" target="_blank" rel="noopener noreferrer"
+                 class="proj-btn proj-btn-primary cyan">
+                🚀 Live Demo
+              </a>
+              <a href="https://github.com/dylanruble7/scrapegoat" target="_blank" rel="noopener noreferrer"
+                 class="proj-btn proj-btn-secondary cyan">
+                📂 Source Code / Demo Video
+              </a>
+            </div>
+          </div>
+
+          <!-- This Page -->
+          <div>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:1rem;font-weight:bold;color:var(--green);display:inline-flex;align-items:center;gap:6px;" class="tg">
+                <img class="ani-gif ani-md" src="gifs/dialing-up.webp" alt="" /> Retro Terminal Résumé
+              </span>
+              <span style="color:var(--green);font-size:0.78rem;display:inline-flex;align-items:center;gap:4px;" class="tg">
+                <img class="ani-gif ani-live" src="gifs/turtle-jedi.webp" alt="" /> LIVE
+              </span>
+            </div>
+            <p style="margin-bottom:10px;font-size:0.88rem;">
+              This page — a Win95 desktop with matrix rain background, Netscape Navigator browser window, GeoCities-style layout, and 90s aesthetics. Built entirely with HTML, Tailwind CSS, and Cursor.
+            </p>
+            <div style="margin-bottom:10px;">
+              <span class="stag g">HTML/CSS</span><span class="stag c">Tailwind</span>
+              <span class="stag a">Cursor</span><span class="stag g">AI-Assisted</span><span class="stag g">Netlify</span>
+            </div>
+            <div class="proj-actions">
+              <a href="https://dylsresume.netlify.app/" target="_blank" rel="noopener noreferrer"
+                 class="proj-btn proj-btn-primary green">
+                🚀 Live Demo
+              </a>
+            </div>
+            <div style="font-size:0.72rem;color:rgba(0,255,65,0.4);margin-top:6px;">&gt; YOU ARE HERE</div>
+          </div>
+        </div>
+
+        <hr class="sect-div">
+
+        <!-- ══ WORK HISTORY ══ -->
+        <div id="history" style="margin-bottom:22px;">
+          <div class="sec-hdr"><img class="ani-gif ani-hdr" src="gifs/construction.webp" alt="" /> Work History — Where I've Been</div>
+
+          <!-- Construction -->
+          <div style="margin-bottom:20px;padding-left:14px;border-left:3px solid var(--amber);">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px;margin-bottom:4px;">
+              <strong style="font-size:0.95rem;color:var(--amber);display:inline-flex;align-items:center;gap:6px;" class="ta">
+                <img class="ani-gif ani-sm" src="gifs/construction.webp" alt="" /> Construction Professional
+              </strong>
+              <span style="font-size:0.78rem;color:rgba(0,255,65,0.5);">2016 – Present</span>
+            </div>
+            <div style="font-size:0.8rem;color:var(--cyan);margin-bottom:8px;" class="tc">Bartlesville, Oklahoma · 10 Years Field Experience</div>
+            <ul style="list-style:none;font-size:0.88rem;line-height:2;">
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/construction.webp" alt="" /> Managed job sites from ground-up — materials, schedules, crews</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/strength.webp" alt="" /> Led and supervised teams; maintained quality and safety on every site</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/osrs.webp" alt="" /> Read blueprints and specs; executed work with precision</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/thieving.webp" alt="" /> Solved real problems in real-time under tight deadlines and budget</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/strength.webp" alt="" /> Field reputation: if it needs to get done, it gets done</li>
+            </ul>
+          </div>
+
+          <!-- Military -->
+          <div style="padding-left:14px;border-left:3px solid var(--green);">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px;margin-bottom:4px;">
+              <strong style="font-size:0.95rem;color:var(--green);display:inline-flex;align-items:center;gap:6px;" class="tg">
+                <img class="ani-gif ani-sm" src="gifs/binary-cat.jpg" alt="" /> U.S. Armed Forces — Veteran
+              </strong>
+              <span style="font-size:0.78rem;color:rgba(0,255,65,0.5);">Prior to 2016</span>
+            </div>
+            <div style="font-size:0.8rem;color:var(--cyan);margin-bottom:8px;" class="tc">United States Military · Honorable Service</div>
+            <ul style="list-style:none;font-size:0.88rem;line-height:2;">
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/halo.jpg" alt="" /> Served honorably in the United States Armed Forces</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/dialing-up.webp" alt="" /> Mission-first mentality: objectives completed, no excuses</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/turtle-jedi.webp" alt="" /> Leadership, teamwork, and high-pressure execution training</li>
+              <li style="display:flex;align-items:flex-start;gap:6px;"><img class="ani-gif ani-sm" src="gifs/melee.webp" alt="" /> Foundation of discipline that carries into every role since</li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="sect-div">
+
+        <!-- ══ WHY HIRE ME ══ -->
+        <div id="hire" style="margin-bottom:22px;">
+          <div class="sec-hdr"><img class="ani-gif ani-hdr" src="gifs/strength.webp" alt="" /> Why Hire Me</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;font-size:0.88rem;line-height:1.9;">
+            <p style="display:flex;align-items:flex-start;gap:8px;"><img class="ani-gif ani-sm" src="gifs/strength.webp" alt="" style="flex-shrink:0;margin-top:2px;" /> Most developers learned to code before they ever learned to work under pressure. <strong style="color:var(--green);" class="tg">I did it the other way around.</strong> Ten years in the field means deadlines are not suggestions — they are reality.</p>
+            <p style="display:flex;align-items:flex-start;gap:8px;"><img class="ani-gif ani-sm" src="gifs/construction.webp" alt="" style="flex-shrink:0;margin-top:2px;" /> Military service means when a mission is assigned, it gets completed. That same standard applies to every digital project: <strong style="color:var(--cyan);" class="tc">ship it, ship it right, ship it on time.</strong></p>
+            <p style="display:flex;align-items:flex-start;gap:8px;"><img class="ani-gif ani-sm" src="gifs/osrs.webp" alt="" style="flex-shrink:0;margin-top:2px;" /> <span><strong style="color:var(--amber);" class="ta">Real-world execution experience</strong> + <strong style="color:var(--green);" class="tg">AI-powered development</strong> = a rare and genuinely powerful combination. I'm ready to build something real for you.</span></p>
+          </div>
+        </div>
+
+        <hr class="sect-div">
+
+        <!-- ══ FOOTER ══ -->
+        <div style="text-align:center;padding:10px 0 6px;">
+          <div style="font-size:0.82rem;margin-bottom:10px;">
+            <a href="mailto:ruble.dylan@yahoo.com" class="ftr-link" style="font-size:0.85rem;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/thieving.webp" alt="" /> Email Me
+            </a>
+            <span class="ftr-link retro-decor" style="cursor:default;font-size:0.85rem;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/yogi-bear.webp" alt="" /> Guestbook
+            </span>
+            <span class="ftr-link retro-decor" style="cursor:default;font-size:0.85rem;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/matrix-rain.webp" alt="" /> Web Ring
+            </span>
+            <span class="ftr-link retro-decor" style="cursor:default;font-size:0.85rem;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;">
+              <img class="ani-gif ani-sm" src="gifs/hacker.webp" alt="" /> IRC: #hacker
+            </span>
+          </div>
+          <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:5px;" class="retro-decor">
+            You are visitor #<span style="color:var(--green);font-weight:bold;">001,337</span> · Since 01/01/1999
+          </div>
+          <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:3px;" class="retro-decor">
+            Best viewed in Netscape Navigator 4.0 at 800×600 · JavaScript Enabled
+          </div>
+          <div style="font-size:0.6rem;color:var(--text-muted);margin-bottom:3px;" class="retro-decor">
+            © 1999 Dylan Ruble · GeoCities Silicon Valley / Matrix / 1337
+          </div>
+          <div style="font-size:0.55rem;color:rgba(0,255,65,0.12);">
+            Actually built: HTML · Tailwind CSS · Cursor · AI Tooling · June 2026
+          </div>
+          <div style="margin-top:10px;font-size:0.62rem;color:rgba(0,255,65,0.22);letter-spacing:0.14em;">
+            &lt;!-- EOF :: dylan_ruble.htm :: &gt; <span class="cur"></span>
+          </div>
+        </div>
+
+        </div><!-- /page-inner -->
+      </div><!-- /rain-page -->
+    </div><!-- /ns-content -->
+
+    <!-- Status bar -->
+    <div class="ns-statusbar">
+      <span class="ns-status-text" style="display:inline-flex;align-items:center;gap:4px;">
+        <img class="ani-gif ani-xs" src="gifs/halo.jpg" alt="" /> Document: Done
+      </span>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <img class="ani-gif ani-xs" src="gifs/binary-cat.jpg" alt="" />
+        <span class="ns-status-security" style="font-size:0.55rem;font-family:'Courier New',monospace;color:#000;">http</span>
+      </div>
+    </div>
+
+  </div><!-- /ns-window -->
+
+  <!-- ═══════════════════════════════════════
+       WINDOWS 95 TASKBAR
+  ═══════════════════════════════════════ -->
+  <div class="win95-taskbar">
+    <button class="start-btn">
+      <span class="start-flag"><img class="ani-gif ani-sm" src="gifs/dancing-baby.jpg" alt="" /></span>
+      <span>Start</span>
+    </button>
+    <div class="taskbar-divider"></div>
+    <button class="taskbar-window-btn">
+      <span style="font-size:0.8rem;">N</span>
+      Netscape - DYLAN RUBLE
+    </button>
+    <div class="taskbar-spacer"></div>
+    <div class="system-tray">
+      <span style="font-size:0.7rem;"><img class="ani-gif ani-sm" src="gifs/dialing-up.webp" alt="" /></span>
+      <span class="tray-clock" id="tray-clock">12:00 PM</span>
+    </div>
+  </div>
+
+  <script>
+    /* ── Game cover layer: fixed inside Netscape pane, scattered, no scroll ── */
+    (function(){
+      const pane = document.querySelector('.ns-content');
+      const bg   = document.querySelector('.game-bg-container');
+      const win  = document.querySelector('.ns-window');
+      if(!pane || !bg) return;
+
+      function syncGameBg(){
+        const r = pane.getBoundingClientRect();
+        const offsetTop = 30; /* keep top covers below location bar */
+        bg.style.top = (r.top + offsetTop) + 'px';
+        bg.style.left = r.left + 'px';
+        bg.style.width = r.width + 'px';
+        bg.style.height = Math.max(0, r.height - offsetTop) + 'px';
+      }
+
+      syncGameBg();
+      window.addEventListener('resize', syncGameBg);
+      window.addEventListener('scroll', syncGameBg, true);
+      new ResizeObserver(syncGameBg).observe(pane);
+      if(win) new ResizeObserver(syncGameBg).observe(win);
+    })();
+
+    /* ── Browser window rain (fills full scroll height) ── */
+    (function(){
+      const wrap = document.querySelector('.ns-content');
+      const c    = document.getElementById('browser-rain');
+      if(!c || !wrap) return;
+      const ctx  = c.getContext('2d');
+      const FS   = 12;
+      let cols, drops, animId;
+
+      function resize(){
+        // match full scrollable height so rain covers while scrolling
+        const w = wrap.clientWidth;
+        const h = wrap.scrollHeight;
+        c.width  = w;
+        c.height = h;
+        cols  = Math.floor(w / FS);
+        drops = Array.from({length:cols}, ()=>Math.random() * -(h / FS));
+      }
+
+      function draw(){
+        ctx.fillStyle = 'rgba(0,0,0,0.06)';
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.font = `${FS}px JetBrains Mono, Fira Code, Courier New, monospace`;
+        const BITS = '01';
+        for(let i = 0; i < cols; i++){
+          const ch = BITS[Math.floor(Math.random()*2)];
+          const y  = drops[i] * FS;
+          ctx.fillStyle = drops[i] > 1 && Math.random() > 0.93
+            ? 'rgba(200,255,200,0.92)'
+            : i % 3 === 0
+              ? 'rgba(0,255,65,0.88)'
+              : 'rgba(0,170,30,0.45)';
+          if(drops[i] > 0) ctx.fillText(ch, i * FS, y);
+          if(y > c.height && Math.random() > 0.972) drops[i] = 0;
+          drops[i] += 0.5;
+        }
+      }
+
+      resize();
+      // re-resize if content grows
+      new ResizeObserver(resize).observe(wrap);
+      window.addEventListener('resize', resize);
+      setInterval(draw, 50);
+    })();
+
+    /* ── Desktop ambient rain ── */
+    (function(){
+      const c = document.getElementById('desktop-rain');
+      const ctx = c.getContext('2d');
+      const FS = 13;
+      let cols, drops;
+      function resize(){
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        cols = Math.floor(c.width / FS);
+        drops = Array.from({length:cols}, ()=>Math.random()*-60);
+      }
+      function draw(){
+        ctx.fillStyle = 'rgba(0,0,0,0.055)';
+        ctx.fillRect(0,0,c.width,c.height);
+        ctx.font = `${FS}px JetBrains Mono, Fira Code, Courier New, monospace`;
+        const BITS = '01';
+        for(let i=0;i<cols;i++){
+          const ch = BITS[Math.floor(Math.random()*2)];
+          const y = drops[i]*FS;
+          // bright head, fading trail
+          ctx.fillStyle = drops[i] > 1 && Math.random() > 0.92
+            ? 'rgba(180,255,180,0.95)'   // occasional bright white-green head
+            : i % 3 === 0
+              ? 'rgba(0,255,65,0.85)'    // strong green
+              : 'rgba(0,180,35,0.5)';    // dim green trail
+          if(drops[i]>0) ctx.fillText(ch, i*FS, y);
+          if(y > c.height && Math.random()>0.97) drops[i]=0;
+          drops[i]+=0.55;
+        }
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      setInterval(draw, 60);
+    })();
+
+    /* ── Live taskbar clock ── */
+    function updateClock(){
+      const now = new Date();
+      let h = now.getHours(), m = now.getMinutes();
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      document.getElementById('tray-clock').textContent =
+        `${h}:${String(m).padStart(2,'0')} ${ampm}`;
+    }
+    updateClock();
+    setInterval(updateClock, 10000);
+
+    /* ── Responsive grids ── */
+    (function(){
+      function fix(){
+        const w = window.innerWidth;
+        const vg = document.getElementById('value-grid');
+        if(vg) vg.style.gridTemplateColumns = w >= 600 ? '1fr 1fr 1fr' : '1fr';
+      }
+      fix();
+      window.addEventListener('resize', fix);
+    })();
+  </script>
+
+</body>
+</html>
